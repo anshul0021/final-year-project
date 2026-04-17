@@ -2,10 +2,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import i18n from 'i18n-js';
 import React from 'react';
 
-import LearnScreen from '../screens/main/learn.screen';
 import AboutZodiacScreen from '../screens/main/learn/about-zodiac.screen';
 import TheElementsScreen from '../screens/main/learn/elements.screen';
 import TheSignsScreen from '../screens/main/learn/signs.screen';
+import LearnScreen from '../screens/main/learn.screen';
 
 const Stack = createStackNavigator();
 

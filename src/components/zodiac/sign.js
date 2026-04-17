@@ -2,11 +2,7 @@ import i18n from 'i18n-js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import {
-  Caption,
-  Subheading,
-  TouchableRipple
-} from 'react-native-paper';
+import { Caption, Subheading, TouchableRipple } from 'react-native-paper';
 
 import { Zodiac } from '../../svgs';
 import PlatformUtils from '../../utils/platform';

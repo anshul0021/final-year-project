@@ -2,8 +2,8 @@ import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import React from 'react';
 
-import Main from './src/main';
 import { initialState, reducer, StateProvider } from './src/contexts/global';
+import Main from './src/main';
 import Translations from './src/translations';
 
 i18n.translations = Translations;

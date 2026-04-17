@@ -14,16 +14,20 @@ Is only published in Android, as Apple is not accepting more Astrology apps, but
 
 - Android: https://play.google.com/store/apps/details?id=josep.astrale
 
-
 ## 🔧 Run it yourself
+
 The app uses Expo for bootstrapping and as develop environment. To get started, first install the dependencies:
+
 ```bash
 $ yarn || npm install
 ```
+
 Then run Expo:
+
 ```bash
 $ expo start
 ```
+
 Then you can use your own mobile device to run the app or use an Android/iOS emulator. Yes, Expo is amazing.
 
 ## 🍋 Features
@@ -41,6 +45,7 @@ As extra features:
 - Change to **other signs** with ease (And check their daily horoscope :p).
 
 ## 🤖 Behind the scenes
+
 _(Deprecated, now all the data is local)_
 
 A good astrology application needs new data for each day and for each sign soooo.... Python scraper to save the day:

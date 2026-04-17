@@ -7,6 +7,7 @@ import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Portal, Text, useTheme } from 'react-native-paper';
 
+import LearnStackNavigation from './learn-stack';
 import { useGlobals } from '../contexts/global';
 import { useIsDark } from '../hooks/use-theme';
 import AstrologersScreen from '../screens/main/astrologers.screen';
@@ -15,7 +16,6 @@ import CompatibilityScreen from '../screens/main/compatibility.screen';
 import DailyScreen from '../screens/main/daily.screen';
 import ProfileScreen from '../screens/main/profile.screen';
 import ZodiacScreen from '../screens/main/zodiac.screen';
-import LearnStackNavigation from './learn-stack';
 
 const BarIcon = ({ color, size, name }) => {
   return (
