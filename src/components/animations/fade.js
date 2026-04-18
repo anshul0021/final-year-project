@@ -9,7 +9,13 @@ import { Animated, Easing } from 'react-native';
  * @returns {*}
  * @constructor
  */
-function Fade({ children, show }) {
+function Fade({
+  children,
+  show,
+  fadeToTop = false,
+  initialHeight = 300,
+  finalHeight = 80,
+}) {
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
@@ -36,14 +42,8 @@ function Fade({ children, show }) {
   );
 }
 
-Fade.defaultProps = {
-  fadeToTop: false,
-  initialHeight: 300,
-  finalHeight: 80,
-};
-
 Fade.propTypes = {
-  fadeToTop: PropTypes.bool.isRequired,
+  fadeToTop: PropTypes.bool,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,

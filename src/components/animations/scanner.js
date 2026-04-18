@@ -8,7 +8,7 @@ import { Animated, View } from 'react-native';
  * @returns {*}
  * @constructor
  */
-function Scanner({ start, style }) {
+function Scanner({ start = false, style }) {
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const [increase, setIncrease] = React.useState(true);
 
@@ -38,12 +38,8 @@ function Scanner({ start, style }) {
   );
 }
 
-Scanner.defaultProps = {
-  start: false,
-};
-
 Scanner.propTypes = {
-  start: PropTypes.bool.isRequired,
+  start: PropTypes.bool,
   style: PropTypes.object,
 };
 

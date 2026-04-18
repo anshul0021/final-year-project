@@ -1,7 +1,6 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
 import Constants from 'expo-constants';
-import i18n from 'i18n-js';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import {
@@ -10,7 +9,6 @@ import {
   Divider,
   Switch,
   Text,
-  Title,
   useTheme,
 } from 'react-native-paper';
 
@@ -25,20 +23,13 @@ import { DateUtils } from '../../utils';
 import PlatformUtils from '../../utils/platform';
 import Storer from '../../utils/storer';
 
-/**
- * @param navigation
- * @returns {*}
- * @constructor
- */
 function ProfileScreen({ navigation }) {
   const [{ session }, dispatch] = useGlobals();
   const { name, sign, birthDate, number, relationship, sex } = session;
   const { colors } = useTheme();
   const { setRate } = useRate();
   const { setStartShare } = useShare(
-    i18n.t(
-      'Try Astrale, the most precise horoscopes app in this existential plain'
-    ),
+    'Try Rashyn, the most precise horoscopes app in this existential plane',
     'https://play.google.com/store/apps/details?id=josep.astrale'
   );
   const isDark = useIsDark();
@@ -58,7 +49,14 @@ function ProfileScreen({ navigation }) {
 
   return (
     <BlurView
-      style={[StyleSheet.absoluteFill]}
+      style={[
+        StyleSheet.absoluteFill,
+        {
+          backgroundColor: isDark
+            ? 'rgba(15, 15, 15, 0.92)'
+            : 'rgba(255, 255, 255, 0.93)',
+        },
+      ]}
       tint={isDark ? 'dark' : 'light'}
       intensity={isAndroid ? 150 : 100}
     >
@@ -67,8 +65,10 @@ function ProfileScreen({ navigation }) {
       <View style={styles.headerContainer}>
         <Avatar.Text label={name.substring(0, 1)} />
         <View style={{ marginLeft: 25 }}>
-          <Title>{i18n.t(sign)}</Title>
-          <Title>{DateUtils.toEuropean(new Date(birthDate))}</Title>
+          <Text variant="titleLarge">{sign}</Text>
+          <Text variant="titleLarge">
+            {DateUtils.toReadable(new Date(birthDate))}
+          </Text>
         </View>
       </View>
       <Divider style={{ marginTop: 25 }} />
@@ -79,7 +79,7 @@ function ProfileScreen({ navigation }) {
             color={colors.text}
             size={18}
           />
-          <Text style={{ marginLeft: 10 }}>{i18n.t(sex)} </Text>
+          <Text style={{ marginLeft: 10 }}>{sex} </Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <MaterialCommunityIcons
@@ -87,7 +87,7 @@ function ProfileScreen({ navigation }) {
             color={colors.text}
             size={18}
           />
-          <Text style={{ marginLeft: 10 }}>{i18n.t(relationship)} </Text>
+          <Text style={{ marginLeft: 10 }}>{relationship} </Text>
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <MaterialCommunityIcons name="dice-6" color={colors.text} size={18} />
@@ -97,37 +97,41 @@ function ProfileScreen({ navigation }) {
       <Divider style={{ marginTop: 15 }} />
       <View style={styles.buttonsContainer}>
         <Button
+          onPress={() => navigation.navigate('EditProfile')}
+          icon="account-edit"
+          style={{ marginTop: 10 }}
+          labelStyle={styles.buttonsLabel}
+          contentStyle={{ justifyContent: 'flex-start' }}
+        >
+          Edit Profile
+        </Button>
+        <Button
           onPress={_handleSharePress}
           icon="account-multiple"
           style={{ marginTop: 10 }}
           labelStyle={styles.buttonsLabel}
-          uppercase={false}
           contentStyle={{ justifyContent: 'flex-start' }}
         >
-          {i18n.t('Share with your friends')}
+          Share with your friends
         </Button>
         <Button
           onPress={_handleRatePress}
           icon="message-draw"
           style={{ marginTop: 10 }}
           labelStyle={styles.buttonsLabel}
-          uppercase={false}
           contentStyle={{ justifyContent: 'flex-start' }}
         >
-          {i18n.t('Rate the app')}
+          Rate the app
         </Button>
-        {__DEV__ && (
-          <Button
-            onPress={_handleLogOut}
-            icon="restart"
-            style={{ marginTop: 10 }}
-            labelStyle={styles.buttonsLabel}
-            uppercase={false}
-            contentStyle={{ justifyContent: 'flex-start' }}
-          >
-            {i18n.t('Restart')}
-          </Button>
-        )}
+        <Button
+          onPress={_handleLogOut}
+          icon="logout"
+          style={{ marginTop: 10 }}
+          labelStyle={styles.buttonsLabel}
+          contentStyle={{ justifyContent: 'flex-start' }}
+        >
+          Log out
+        </Button>
       </View>
       <Divider style={{ marginTop: 10 }} />
       <View style={styles.optionsContainer}>
@@ -136,12 +140,11 @@ function ProfileScreen({ navigation }) {
             icon="brightness-6"
             style={styles.optionsButton}
             labelStyle={styles.optionsLabel}
-            uppercase={false}
-            theme={{ colors: { primary: colors.text } }}
+            textColor={colors.text}
           >
-            {i18n.t('Dark theme')}
+            Dark theme
           </Button>
-          <Switch onChange={_handleDarkThemeChange} value={isDark} />
+          <Switch onValueChange={_handleDarkThemeChange} value={isDark} />
         </View>
       </View>
       <Divider style={{ marginTop: 10 }} />
@@ -156,7 +159,7 @@ function ProfileScreen({ navigation }) {
           },
         ]}
       >
-        <Text>v{Constants.manifest.version}</Text>
+        <Text>v{Constants.expoConfig.version}</Text>
       </View>
     </BlurView>
   );

@@ -9,7 +9,7 @@ import { Animated, Easing } from 'react-native';
  * @returns {*}
  * @constructor
  */
-function ShowFromTop({ children, duration }) {
+function ShowFromTop({ children, duration = 250 }) {
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
 
   Animated.timing(fadeAnim, {
@@ -44,9 +44,6 @@ function ShowFromTop({ children, duration }) {
   );
 }
 
-ShowFromTop.defaultProps = {
-  duration: 250,
-};
 ShowFromTop.propTypes = {
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),

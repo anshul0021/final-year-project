@@ -1,14 +1,13 @@
-import i18n from 'i18n-js';
 import React from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import {
   Button,
   Divider,
-  Paragraph,
   ProgressBar,
   Text,
   useTheme,
 } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ShowFromTop from '../../components/animations/show-from-top';
 import SpaceSky from '../../components/decorations/space-sky';
@@ -16,26 +15,18 @@ import MainNav from '../../components/navs/main-nav';
 import ShadowHeadline from '../../components/paper/shadow-headline';
 import TextBold from '../../components/paper/text-bold';
 import { Sign } from '../../components/zodiac';
-import { stale } from '../../constants/stale';
 import HoroscopeSigns from '../../constants/zodiac-signs';
-import { Language } from '../../utils';
+import { useGlobals } from '../../contexts/global';
+import api from '../../services/api';
+import Storer from '../../utils/storer';
 
-/**
- * Progress bars from match
- * @param start {number|string}
- * @param name {string}
- * @param icon {string}
- * @param end
- * @returns {*}
- * @constructor
- */
 const Bars = ({ name, icon, end }) => {
   const { colors } = useTheme();
   return (
     <>
       <View style={styles.mathProgressText}>
-        <Button theme={{ colors: { primary: colors.text } }} icon={icon}>
-          {i18n.t(name)}
+        <Button textColor={colors.text} icon={icon}>
+          {name}
         </Button>
         <Text>{end}%</Text>
       </View>
@@ -44,40 +35,93 @@ const Bars = ({ name, icon, end }) => {
   );
 };
 
-/**
- * Content when both selected
- * @returns {*}
- * @constructor
- */
 const MatchContent = ({ sign1, sign2 }) => {
-  const dataIndex = stale.findIndex(
-    (item) => item.sign1 === sign1 && item.sign2 === sign2
-  );
-  const data = stale[dataIndex !== -1 ? dataIndex : 0];
+  const [data, setData] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    const [sorted1, sorted2] = [sign1, sign2].sort();
+    const CACHE_KEY = `compatibility_${sorted1}_${sorted2}`;
+    const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+
+    const fetchCompat = async () => {
+      setLoading(true);
+      setError(null);
+
+      // Check local cache first
+      try {
+        const cached = await Storer.get(CACHE_KEY);
+        if (cached && Date.now() - cached.timestamp < TWENTY_FOUR_HOURS) {
+          if (!cancelled) {
+            setData(cached.data);
+            setLoading(false);
+          }
+          return;
+        }
+      } catch {}
+
+      // No valid cache, fetch from API
+      try {
+        const result = await api.horoscope.getCompatibility(sign1, sign2, 'en');
+        if (!cancelled) {
+          setData(result);
+          setLoading(false);
+          Storer.set(CACHE_KEY, { data: result, timestamp: Date.now() });
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message || 'Failed to load compatibility');
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchCompat();
+    return () => {
+      cancelled = true;
+    };
+  }, [sign1, sign2]);
+
   const matches_data = [
-    {
-      name: 'Intimate',
-      icon: 'account-multiple-plus-outline',
-    },
+    { name: 'Intimate', icon: 'account-multiple-plus-outline' },
     { name: 'Mindset', icon: 'thought-bubble' },
     { name: 'Feelings', icon: 'heart' },
-    { name: 'Priorities', icon: 'priority-high' },
+    { name: 'Priorities', icon: 'flag' },
     { name: 'Interests', icon: 'sticker-emoji' },
     { name: 'Sport', icon: 'run' },
   ];
+
+  if (loading) {
+    return (
+      <View style={{ padding: 40, alignItems: 'center' }}>
+        <ProgressBar indeterminate style={{ width: 200, borderRadius: 5 }} />
+        <Text style={{ marginTop: 10 }}>Loading...</Text>
+      </View>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <View style={{ padding: 40, alignItems: 'center' }}>
+        <Text style={{ marginBottom: 10 }}>{error || 'Something went wrong'}</Text>
+      </View>
+    );
+  }
 
   return (
     <>
       <View style={styles.surfaceContainer}>
         <ShowFromTop>
           <TextBold style={{ marginBottom: 10 }}>
-            {i18n.t(sign1)} & {i18n.t(sign2)}
+            {sign1} & {sign2}
           </TextBold>
-          <Paragraph>{data.resume[Language.filteredLocale()]}</Paragraph>
+          <Text variant="bodyMedium">{data.resume}</Text>
           <TextBold style={{ marginTop: 20, marginBottom: 10 }}>
-            {i18n.t('Relationship')}
+            Relationship
           </TextBold>
-          <Paragraph>{data.relationship[Language.filteredLocale()]}</Paragraph>
+          <Text variant="bodyMedium">{data.relationship}</Text>
           <View style={{ marginVertical: 20 }}>
             {matches_data.map((props, index) => (
               <Bars
@@ -93,12 +137,6 @@ const MatchContent = ({ sign1, sign2 }) => {
   );
 };
 
-/**
- * Each sign on body
- * @param onPress {func}
- * @returns {*}
- * @constructor
- */
 const SignsContent = ({ onPress }) => (
   <View style={styles.signsContainer}>
     {HoroscopeSigns.map((sign) => (
@@ -115,18 +153,13 @@ const SignsContent = ({ onPress }) => (
   </View>
 );
 
-/**
- * @param navigation
- * @returns {*}
- * @constructor
- */
 function CompatibilityScreen({ navigation }) {
   const { colors } = useTheme();
   const [scRef, setScRef] = React.useState();
   const [selectedSigns, setSelectedSigns] = React.useState([]);
   const [compDetailsShow, setCompDetailsShow] = React.useState(false);
   const handleSignPress = (sign) => {
-    setSelectedSigns((selectedSigns) => [...selectedSigns, sign]);
+    setSelectedSigns((prev) => (prev.length >= 2 ? prev : [...prev, sign]));
   };
   const handleSignTopPress = () =>
     setSelectedSigns([]) || setCompDetailsShow(false);
@@ -135,6 +168,7 @@ function CompatibilityScreen({ navigation }) {
       setCompDetailsShow(true);
       scRef.scrollTo({ y: 0 });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedSigns]);
 
   return (
@@ -143,7 +177,7 @@ function CompatibilityScreen({ navigation }) {
       <View style={{ marginBottom: 10 }}>
         <MainNav />
         <View style={styles.headerContainer}>
-          <ShadowHeadline>{i18n.t('Compatibility')}</ShadowHeadline>
+          <ShadowHeadline>Compatibility</ShadowHeadline>
         </View>
       </View>
       <View style={styles.matchCirclesContainer}>
@@ -167,7 +201,7 @@ function CompatibilityScreen({ navigation }) {
             ]}
           >
             <Text style={{ textAlign: 'center', fontSize: 10 }}>
-              {i18n.t('Your sign')}
+              Your sign
             </Text>
           </View>
         )}
@@ -194,7 +228,7 @@ function CompatibilityScreen({ navigation }) {
             ]}
           >
             <Text style={{ textAlign: 'center', fontSize: 10 }}>
-              {i18n.t('Partner sign')}
+              Partner sign
             </Text>
           </View>
         )}

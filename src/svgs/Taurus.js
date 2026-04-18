@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import Svg, { Path } from 'react-native-svg';
 
-function Taurus({ color, height, width, style }) {
+function Taurus({ color = 'white', height = 120, width = 120, style }) {
   return (
     <Svg height={height} width={width} viewBox="0 0 512 512" style={style}>
       <Path
@@ -21,15 +21,9 @@ function Taurus({ color, height, width, style }) {
   );
 }
 
-Taurus.defaultProps = {
-  height: 120,
-  width: 120,
-  color: 'white',
-};
-
 Taurus.propTypes = {
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   style: PropTypes.object,
   color: PropTypes.string,
 };

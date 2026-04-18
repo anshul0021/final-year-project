@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import Svg, { Circle, G, Path } from 'react-native-svg';
 
-function Pisces({ color, height, width, style }) {
+function Pisces({ color = '#FFFFFFFF', height = 120, width = 120, style }) {
   return (
     <Svg height={height} width={width} viewBox="0 0 512 512" style={style}>
       <G fill="#bc4598">
@@ -93,15 +93,9 @@ function Pisces({ color, height, width, style }) {
   );
 }
 
-Pisces.defaultProps = {
-  height: 120,
-  width: 120,
-  color: '#FFFFFFFF',
-};
-
 Pisces.propTypes = {
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   style: PropTypes.object,
   color: PropTypes.string,
 };

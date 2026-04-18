@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import Svg, { Circle, G, Path } from 'react-native-svg';
 
-function SolarSystem({ height, width, style }) {
+function SolarSystem({ height = 120, width = 120, style }) {
   return (
     <Svg height={height} width={width} viewBox="0 0 512 512" style={style}>
       <Circle cx={256} cy={256} fill="#5f4bbc" r={232} />
@@ -76,14 +76,9 @@ function SolarSystem({ height, width, style }) {
   );
 }
 
-SolarSystem.defaultProps = {
-  height: 120,
-  width: 120,
-};
-
 SolarSystem.propTypes = {
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   style: PropTypes.object,
 };
 

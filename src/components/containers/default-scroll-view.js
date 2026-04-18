@@ -16,7 +16,7 @@ import PlatformUtils from '../../utils/platform';
 function DefaultScrollView({
   children,
   background,
-  keyboardAvoidView,
+  keyboardAvoidView = true,
   styleScrollView,
   onScrollCallback,
 }) {
@@ -55,10 +55,6 @@ DefaultScrollView.propTypes = {
   styleScrollView: PropTypes.object,
   keyboardAvoidView: PropTypes.bool,
   onScrollCallback: PropTypes.func,
-};
-
-DefaultScrollView.defaultProps = {
-  keyboardAvoidView: true,
 };
 
 export default DefaultScrollView;

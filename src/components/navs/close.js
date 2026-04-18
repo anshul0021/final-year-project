@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -14,7 +14,7 @@ import PlatformUtils from '../../utils/platform';
  * @returns {*}
  * @constructor
  */
-function Close({ style, position }) {
+function Close({ style, position = 'left' }) {
   const navigation = useNavigation();
   const { colors } = useTheme();
   const innerPosition = position === 'left' ? { left: 20 } : { right: 20 };
@@ -43,10 +43,6 @@ function Close({ style, position }) {
 Close.propTypes = {
   style: PropTypes.object,
   position: PropTypes.oneOf(['left', 'right']),
-};
-
-Close.defaultProps = {
-  position: 'left',
 };
 
 const styles = StyleSheet.create({

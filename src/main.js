@@ -1,5 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import AppLoading from 'expo-app-loading';
+import * as SplashScreen from 'expo-splash-screen';
 import React from 'react';
 import { AppState } from 'react-native';
 import { Provider as PaperProvider } from 'react-native-paper';
@@ -7,10 +7,13 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import { SESSION_KEY } from './constants/session';
 import themes from './constants/themes';
 import { useGlobals } from './contexts/global';
+import AuthStackNavigation from './navigation/auth-stack';
 import InitialStackNavigation from './navigation/initial-stack';
 import MainStackNavigation from './navigation/main-stack';
 import { DateUtils } from './utils';
 import Storer from './utils/storer';
+
+SplashScreen.preventAutoHideAsync();
 
 /**
  * @returns {*}
@@ -38,9 +41,12 @@ function Main() {
       setAppState(nextAppState);
     };
 
-    AppState.addEventListener('change', handleAppStateChange);
+    const subscription = AppState.addEventListener(
+      'change',
+      handleAppStateChange
+    );
     return () => {
-      AppState.removeEventListener('change', handleAppStateChange);
+      subscription.remove();
     };
   }, [appState, day, dispatch]);
 
@@ -57,18 +63,21 @@ function Main() {
         }
       } finally {
         setIsReady(true);
+        SplashScreen.hideAsync();
       }
     })();
   }, [dispatch]);
 
   if (!isReady) {
-    return <AppLoading />;
+    return null;
   }
 
   return (
     <PaperProvider theme={_theme}>
       <NavigationContainer theme={_theme}>
-        {session.basicsDone ? (
+        {!session.authToken ? (
+          <AuthStackNavigation />
+        ) : session.basicsDone ? (
           <MainStackNavigation />
         ) : (
           <InitialStackNavigation />

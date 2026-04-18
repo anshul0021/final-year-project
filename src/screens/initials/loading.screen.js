@@ -1,32 +1,27 @@
-import i18n from 'i18n-js';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Subheading, useTheme } from 'react-native-paper';
+import { Text, useTheme } from 'react-native-paper';
 
 import Rotation from '../../components/animations/rotation';
 import { DefaultView } from '../../components/containers';
 import SpaceSky from '../../components/decorations/space-sky';
 import { SESSION_KEY } from '../../constants/session';
 import { useGlobals } from '../../contexts/global';
+import api from '../../services/api';
 import SolarSystem from '../../svgs/SolarSystem';
 import Storer from '../../utils/storer';
 
-/**
- * @param navigation
- * @returns {*}
- * @constructor
- */
 function LoadingScreen({ navigation }) {
   const [{ session }, dispatch] = useGlobals();
   const { colors } = useTheme();
   const [phrase, setPhrase] = React.useState(0);
   const phrases = [
-    i18n.t('Analyzing name'),
-    i18n.t('Analyzing birth date'),
-    i18n.t('Analyzing gender'),
-    i18n.t('Analyzing relationship status'),
-    i18n.t('Analyzing favourite number'),
-    i18n.t('Concluding analysis'),
+    'Analyzing name...',
+    'Analyzing birth date...',
+    'Analyzing gender...',
+    'Analyzing relationship status...',
+    'Analyzing favourite number...',
+    'Concluding analysis...',
   ];
 
   React.useEffect(() => {
@@ -39,6 +34,16 @@ function LoadingScreen({ navigation }) {
           ...{ days: 1, daysRow: 1, basicsDone: true },
         };
         Storer.set(SESSION_KEY, preSession).then(() => {
+          // Sync onboarding data to backend (non-blocking)
+          api.user
+            .saveOnboarding({
+              sign: session.sign,
+              birthDate: session.birthDate,
+              sex: session.sex,
+              relationship: session.relationship,
+              number: session.number,
+            })
+            .catch((e) => console.warn('Failed to sync onboarding:', e));
           dispatch({
             type: 'setSession',
             fields: preSession,
@@ -59,9 +64,12 @@ function LoadingScreen({ navigation }) {
         </Rotation>
       </View>
       <View style={{ flex: 3 }}>
-        <Subheading style={[styles.textSubheading, { color: colors.primary }]}>
+        <Text
+          variant="titleMedium"
+          style={[styles.textSubheading, { color: colors.primary }]}
+        >
           {phrases[phrase]}
-        </Subheading>
+        </Text>
       </View>
     </DefaultView>
   );

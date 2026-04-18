@@ -1,14 +1,8 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import i18n from 'i18n-js';
 import React from 'react';
-import { SafeAreaView, StyleSheet, View } from 'react-native';
-import {
-  Divider,
-  ProgressBar,
-  Subheading,
-  Text,
-  useTheme,
-} from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { Divider, ProgressBar, Text, useTheme } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import ShowFromTop from '../../components/animations/show-from-top';
 import ScrollViewFadeFirst from '../../components/containers/scroll-view-fade-first';
@@ -17,23 +11,17 @@ import MainNav from '../../components/navs/main-nav';
 import ShadowHeadline from '../../components/paper/shadow-headline';
 import TextBold from '../../components/paper/text-bold';
 import { Sign } from '../../components/zodiac';
-import { daily } from '../../constants/daily';
 import months from '../../constants/months';
 import { SESSION_KEY } from '../../constants/session';
 import { useGlobals } from '../../contexts/global';
-import { Language } from '../../utils';
+import api from '../../services/api';
 import Storer from '../../utils/storer';
 
-/**
- * @param number {number}
- * @returns {*}
- * @constructor
- */
 const LuckyNumber = ({ number }) => {
   const { colors } = useTheme();
   return (
     <View
-      style={[LuckyNumberStyles.circle, { backgroundColor: colors.accent }]}
+      style={[LuckyNumberStyles.circle, { backgroundColor: colors.secondary }]}
     >
       <Text style={{ fontSize: 16, marginTop: 3 }}>{number}</Text>
     </View>
@@ -50,20 +38,13 @@ const LuckyNumberStyles = StyleSheet.create({
   },
 });
 
-/**
- * @param text {text}
- * @param percent {number}
- * @param style {object}
- * @returns {*}
- * @constructor
- */
 const ProgressItem = ({ text, percent, style }) => {
   const { colors } = useTheme();
   return (
     <View style={[{ flex: 1 }, style]}>
       <Text style={ProgressItemStyles.text}>{text}</Text>
       <ProgressBar style={ProgressItemStyles.bar} progress={percent / 100} />
-      <Text theme={{ colors: { text: colors.primary } }}>{percent}%</Text>
+      <Text style={{ color: colors.primary }}>{percent}%</Text>
     </View>
   );
 };
@@ -78,20 +59,12 @@ const ProgressItemStyles = StyleSheet.create({
   },
 });
 
-/**
- * @param navigation {object}
- * @returns {*}
- * @constructor
- */
 function DailyScreen({ navigation }) {
   const [{ session }, dispatch] = useGlobals();
   const { colors } = useTheme();
-  const dataIndex = daily.findIndex(
-    (item) =>
-      item.day.split('-')[2].toString() === new Date().getDate().toString() &&
-      item.sign === session.sign
-  );
-  const data = daily[dataIndex !== -1 ? dataIndex : 0];
+  const [data, setData] = React.useState(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
   const d = new Date();
 
   React.useLayoutEffect(() => {
@@ -99,6 +72,51 @@ function DailyScreen({ navigation }) {
       Storer.delete(SESSION_KEY).then(() => dispatch({ type: 'setLogOut' }));
     }
   }, [dispatch, session?.sign]);
+
+  React.useEffect(() => {
+    if (!session?.sign) return;
+    let cancelled = false;
+    const CACHE_KEY = `daily_horoscope_${session.sign}`;
+    const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+
+    const fetchDaily = async () => {
+      setLoading(true);
+      setError(null);
+
+      // Check local cache first
+      try {
+        const cached = await Storer.get(CACHE_KEY);
+        if (cached && Date.now() - cached.timestamp < TWENTY_FOUR_HOURS) {
+          if (!cancelled) {
+            setData(cached.data);
+            setLoading(false);
+          }
+          return;
+        }
+      } catch {}
+
+      // No valid cache, fetch from API
+      try {
+        const result = await api.horoscope.getDaily(session.sign, 'en');
+        if (!cancelled) {
+          setData(result);
+          setLoading(false);
+          // Save to local cache with timestamp
+          Storer.set(CACHE_KEY, { data: result, timestamp: Date.now() });
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setError(err.message);
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchDaily();
+    return () => {
+      cancelled = true;
+    };
+  }, [session?.sign]);
 
   const Header = (
     <View>
@@ -121,19 +139,42 @@ function DailyScreen({ navigation }) {
           signHeight={70}
         />
         <ShadowHeadline style={styles.headerHeadline}>
-          {i18n.t(session.sign)}
+          {session.sign}
         </ShadowHeadline>
-        <Subheading>
-          {i18n.t('date_daily', {
-            day: d.getDate(),
-            month: months[session.language][d.getMonth()],
-            year: d.getFullYear(),
-          })}
-        </Subheading>
+        <Text variant="titleMedium">
+          {`Day ${d.getDate()} of ${months[d.getMonth()]}, ${d.getFullYear()}`}
+        </Text>
       </View>
       <Divider />
     </View>
   );
+
+  if (loading) {
+    return (
+      <>
+        <SpaceSky />
+        <SafeAreaView
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <ProgressBar indeterminate style={{ width: 200, borderRadius: 5 }} />
+          <Text style={{ marginTop: 15 }}>Loading...</Text>
+        </SafeAreaView>
+      </>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <>
+        <SpaceSky />
+        <SafeAreaView
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
+          <Text>Something is wrong</Text>
+        </SafeAreaView>
+      </>
+    );
+  }
 
   return (
     <>
@@ -153,12 +194,12 @@ function DailyScreen({ navigation }) {
               ]}
             >
               <TextBold style={styles.textTitles}>
-                {i18n.t('Focus of the day')}:
+                Focus of the day:
               </TextBold>
               <TextBold
                 style={{ fontSize: 16, marginLeft: 5, color: colors.primary }}
               >
-                {i18n.t(data.contents.focus)}
+                {data.focus}
               </TextBold>
             </View>
             <View
@@ -173,23 +214,23 @@ function DailyScreen({ navigation }) {
               ]}
             >
               <ProgressItem
-                text={i18n.t('Love')}
-                percent={data.contents.percents.love}
+                text="Love"
+                percent={data.percents.love}
               />
               <ProgressItem
-                text={i18n.t('Career')}
-                percent={data.contents.percents.work}
+                text="Career"
+                percent={data.percents.work}
                 style={{ marginHorizontal: 5 }}
               />
               <ProgressItem
-                text={i18n.t('Health')}
-                percent={data.contents.percents.health}
+                text="Health"
+                percent={data.percents.health}
               />
             </View>
             <View style={[styles.defaultContainer]}>
               <View style={styles.horoscopeTodayContainer}>
                 <TextBold style={styles.textTitles}>
-                  {i18n.t('Your horoscope for today')}:
+                  Your horoscope for today:
                 </TextBold>
                 <View style={styles.iconsHoroscopeToday}>
                   <MaterialCommunityIcons
@@ -212,13 +253,11 @@ function DailyScreen({ navigation }) {
                   />
                 </View>
               </View>
-              <Text style={{ marginTop: 15 }}>
-                {data.contents.text[Language.filteredLocale()]}
-              </Text>
+              <Text style={{ marginTop: 15 }}>{data.text}</Text>
             </View>
             <View style={styles.defaultContainer}>
               <TextBold style={styles.textTitles}>
-                {i18n.t('Today you love')}
+                Today you love
               </TextBold>
             </View>
             <View
@@ -240,11 +279,11 @@ function DailyScreen({ navigation }) {
                 <MaterialCommunityIcons
                   name="heart"
                   size={30}
-                  color={colors.accent}
+                  color={colors.secondary}
                 />
               </View>
               <View style={[styles.loveSignsContainer]}>
-                {data.contents.compatibility.map((sign, i) => (
+                {data.compatibility.map((sign, i) => (
                   <Sign
                     key={i}
                     sign={sign}
@@ -258,7 +297,7 @@ function DailyScreen({ navigation }) {
             <Divider style={{ marginTop: 20 }} />
             <View style={styles.defaultContainer}>
               <TextBold style={styles.textTitles}>
-                {i18n.t('Lucky numbers')}
+                Lucky numbers
               </TextBold>
             </View>
             <View
@@ -270,7 +309,7 @@ function DailyScreen({ navigation }) {
                 },
               ]}
             >
-              {data.contents.numbers.map((number, i) => (
+              {data.numbers.map((number, i) => (
                 <LuckyNumber key={i} number={number} />
               ))}
             </View>

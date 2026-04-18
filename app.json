@@ -1,11 +1,13 @@
 {
   "expo": {
-    "name": "Astrale",
-    "slug": "astrale",
+    "name": "Rashyn",
+    "slug": "rashyn",
     "version": "1.0.0",
-    "description": "Discover what the future holds for you. Get an insight on what to expect for love, work, well-being and good fortune for today with Astrale app.",
-    "privacy": "public",
-    "platforms": ["ios", "android"],
+    "description": "Discover what the future holds for you. Get an insight on what to expect for love, work, well-being and good fortune for today with Rashyn app.",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "primaryColor": "#151515",
@@ -14,20 +16,20 @@
       "resizeMode": "contain",
       "backgroundColor": "#151515"
     },
-    "assetBundlePatterns": ["**/*"],
-    "scheme": "astrale",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "scheme": "rashyn",
     "ios": {
-      "bundleIdentifier": "x.astrale",
+      "bundleIdentifier": "com.rashyn.app",
       "buildNumber": "1.0.0",
       "supportsTablet": false,
-      "icon": "./assets/images/icon.png",
-      "infoPlist": {
-        "NSCameraUsageDescription": "This application uses the camera to scan your hand and read your lifelines"
-      }
+      "icon": "./assets/images/icon.png"
     },
     "android": {
-      "package": "x.astrale",
-      "versionCode": 4
+      "package": "com.rashyn.app",
+      "versionCode": 4,
+      "usesCleartextTraffic": true
     },
     "androidStatusBar": {
       "hidden": false,
@@ -35,10 +37,9 @@
       "barStyle": "light-content",
       "backgroundColor": "#151515"
     },
-    "notification": {
-      "icon": "./assets/images/icon-notification.png",
-      "color": "#151515",
-      "iosDisplayInForeground": true
-    }
+    "plugins": [
+      "@react-native-community/datetimepicker",
+      "expo-asset"
+    ]
   }
 }

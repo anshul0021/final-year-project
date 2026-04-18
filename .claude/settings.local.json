@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install)",
+      "Bash(ulimit -n:*)",
+      "Bash(npm uninstall:*)",
+      "Bash(npx expo:*)",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(./node_modules/.bin/expo:*)",
+      "Bash(EXPO_USE_BETA_CLI=true npx expo:*)",
+      "Bash(npm start)",
+      "Bash(adb devices:*)",
+      "Bash(adb:*)",
+      "WebSearch",
+      "Bash(npm view:*)",
+      "mcp__ide__getDiagnostics",
+      "Bash(curl:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg3MTkyMGFiYzI1MDFkZmIwNzg5NTQiLCJpYXQiOjE3NzA0NjE0NzMsImV4cCI6MTc3MzA1MzQ3M30.JdGOvJGl2D_Dqb-u10Js1W1JGdep6-GX6RFfCt85u7A\")",
+      "Bash(__NEW_LINE_c9fc6aeb680cd918__ echo \"=== 1. CHAT API ===\")",
+      "Bash(__NEW_LINE_c9fc6aeb680cd918__ echo -e \"\\\\n\\\\n=== 2. DAILY HOROSCOPE API ===\")",
+      "Bash(__NEW_LINE_c9fc6aeb680cd918__ echo -e \"\\\\n\\\\n=== 3. COMPATIBILITY API ===\")",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg3MTkyMGFiYzI1MDFkZmIwNzg5NTQiLCJpYXQiOjE3NzA0NjE0NzMsImV4cCI6MTc3MzA1MzQ3M30.JdGOvJGl2D_Dqb-u10Js1W1JGdep6-GX6RFfCt85u7A\" __NEW_LINE_22404c51e4fa2e63__ echo \"=== 2. DAILY HOROSCOPE ===\" curl -s \"http://localhost:3000/api/horoscope/daily?sign=Leo&lang=en\" -H \"Authorization: Bearer $TOKEN\")",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(export TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTg3MTkyMGFiYzI1MDFkZmIwNzg5NTQiLCJpYXQiOjE3NzA0NjE0NzMsImV4cCI6MTc3MzA1MzQ3M30.JdGOvJGl2D_Dqb-u10Js1W1JGdep6-GX6RFfCt85u7A\")",
+      "Bash(ANDROID_HOME=/Users/ankitjangid/Library/Android/sdk npx eas-cli@latest build:*)",
+      "Bash(export ANDROID_HOME=/Users/ankitjangid/Library/Android/sdk:*)",
+      "Bash(./gradlew assembleRelease:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npx eas-cli:*)",
+      "Bash(python3:*)",
+      "Bash(pip3 install:*)",
+      "Bash(ls:*)",
+      "Bash(git checkout:*)",
+      "Bash(./gradlew bundleRelease:*)",
+      "Bash(./gradlew clean:*)",
+      "Bash(npx vercel:*)"
+    ]
+  }
+}

@@ -10,7 +10,7 @@ import { Animated, Easing } from 'react-native';
  * @returns {*}
  * @constructor
  */
-function Rotation({ children, rotate, style }) {
+function Rotation({ children, rotate = false, style }) {
   const spinAnim = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
@@ -36,12 +36,8 @@ function Rotation({ children, rotate, style }) {
   );
 }
 
-Rotation.defaultProps = {
-  rotate: false,
-};
-
 Rotation.propTypes = {
-  rotate: PropTypes.bool.isRequired,
+  rotate: PropTypes.bool,
   children: PropTypes.oneOfType([
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node,

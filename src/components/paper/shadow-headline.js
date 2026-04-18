@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { Title } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 
 /**
  * @param props
@@ -9,9 +9,9 @@ import { Title } from 'react-native-paper';
  */
 function ShadowHeadline(props) {
   return (
-    <Title {...props} style={[props.style, styles.shadow]}>
+    <Text variant="titleLarge" {...props} style={[props.style, styles.shadow]}>
       {props.children}
-    </Title>
+    </Text>
   );
 }
 

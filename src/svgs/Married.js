@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTheme } from 'react-native-paper';
 import Svg, { Circle, Path } from 'react-native-svg';
 
-function Married({ color, height, width, style }) {
+function Married({ color = 'white', height = 120, width = 120, style }) {
   const { colors } = useTheme();
 
   return (
@@ -34,15 +34,9 @@ function Married({ color, height, width, style }) {
   );
 }
 
-Married.defaultProps = {
-  height: 120,
-  width: 120,
-  color: 'white',
-};
-
 Married.propTypes = {
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   style: PropTypes.object,
   color: PropTypes.string,
 };

@@ -1,8 +1,6 @@
-import i18n from 'i18n-js';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Headline, Text } from 'react-native-paper';
-import TouchableRipple from 'react-native-paper/src/components/TouchableRipple/index';
+import { Button, Text, TouchableRipple } from 'react-native-paper';
 
 import { DefaultView } from '../../components/containers';
 import SpaceSky from '../../components/decorations/space-sky';
@@ -13,11 +11,6 @@ import ItsDifficult from '../../svgs/ItsDifficult';
 import Married from '../../svgs/Married';
 import Taurus from '../../svgs/Taurus';
 
-/**
- * @param navigation
- * @returns {*}
- * @constructor
- */
 function RelationshipScreen({ navigation }) {
   const [{ session }, dispatch] = useGlobals();
   const [relationshipStatus, setRelationshipStatus] = React.useState('');
@@ -36,14 +29,11 @@ function RelationshipScreen({ navigation }) {
       <Taurus width={60} height={60} style={styles.taurus} />
       <View style={{ flex: 0.4 }} />
       <View style={styles.textContainer}>
-        <Headline style={styles.textHeadline}>
-          {i18n.t('What is your relationship status')}
-        </Headline>
+        <Text variant="headlineMedium" style={styles.textHeadline}>
+          What is your relationship status?
+        </Text>
         <Text style={styles.textText}>
-          {i18n.t(
-            '{name}, to give you accurate and personal information we need to know some info',
-            { name: session.name }
-          )}
+          {`${session.name}, to give you accurate and personal information we need to know some info about you.`}
         </Text>
       </View>
       <View style={styles.sexContainer}>
@@ -56,7 +46,7 @@ function RelationshipScreen({ navigation }) {
               width={100}
               style={{ opacity: relationshipStatus === 'Married' ? 1 : 0.5 }}
             />
-            <Text style={styles.sexText}>{i18n.t('Married')}</Text>
+            <Text style={styles.sexText}>Married</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple
@@ -68,7 +58,7 @@ function RelationshipScreen({ navigation }) {
               width={100}
               style={{ opacity: relationshipStatus === 'Single' ? 1 : 0.5 }}
             />
-            <Text style={styles.sexText}>{i18n.t('Single')}</Text>
+            <Text style={styles.sexText}>Single</Text>
           </View>
         </TouchableRipple>
       </View>
@@ -83,7 +73,7 @@ function RelationshipScreen({ navigation }) {
               width={100}
               style={{ opacity: relationshipStatus === 'In love' ? 1 : 0.5 }}
             />
-            <Text style={styles.sexText}>{i18n.t('In love')}</Text>
+            <Text style={styles.sexText}>In love</Text>
           </View>
         </TouchableRipple>
         <TouchableRipple
@@ -97,7 +87,7 @@ function RelationshipScreen({ navigation }) {
                 opacity: relationshipStatus === "It's difficult" ? 1 : 0.5,
               }}
             />
-            <Text style={styles.sexText}>{i18n.t("It's difficult")}</Text>
+            <Text style={styles.sexText}>{"It's difficult"}</Text>
           </View>
         </TouchableRipple>
       </View>
@@ -107,7 +97,7 @@ function RelationshipScreen({ navigation }) {
           disabled={buttonDisabled}
           onPress={_handleContinue}
         >
-          {i18n.t('Continue')}
+          Continue
         </Button>
       </View>
     </DefaultView>

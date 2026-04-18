@@ -3,17 +3,17 @@ import * as React from 'react';
 import { useTheme } from 'react-native-paper';
 import Svg, { Ellipse, G, Path } from 'react-native-svg';
 
-function Dices({ color, height, width, style }) {
+function Dices({ color = 'white', height = 120, width = 120, style }) {
   const { colors } = useTheme();
   return (
     <Svg height={height} width={width} viewBox="0 0 512 512" style={style}>
       <Path
         d="M512 256c0 141.385-114.615 256-256 256-86.977 0-163.819-43.374-210.087-109.672v-.01a255.544 255.544 0 01-27.909-51.816A252.832 252.832 0 018.475 321.6C2.947 300.659 0 278.674 0 256c0-15.005 1.296-29.717 3.772-44.022.209-1.191.428-2.382.648-3.563a250.113 250.113 0 015.298-22.476 253.657 253.657 0 0114.367-38.463C64.909 60.343 153.412 0 256 0c141.385 0 256 114.615 256 256z"
-        fill={colors.accent}
+        fill={colors.secondary}
       />
       <Path
         d="M451.135 195.135c0 107.771-87.365 195.135-195.135 195.135-66.298 0-124.871-33.062-160.138-83.597v-.008a194.777 194.777 0 01-21.274-39.497 192.722 192.722 0 01-7.264-22.031c-4.213-15.961-6.46-32.719-6.46-50.003 0-11.437.987-22.651 2.876-33.555.16-.908.327-1.816.494-2.716a190.54 190.54 0 014.039-17.132 193.362 193.362 0 0110.952-29.318C110.341 45.996 177.803 0 256 0c107.771 0 195.135 87.365 195.135 195.135z"
-        fill={colors.accent}
+        fill={colors.secondary}
       />
       <G fill="#d6dfe8">
         <Path d="M509.816 287.807c0 3.135-1.515 6.269-4.545 8.119l-129.546 79.276a25.18 25.18 0 01-26.279 0L219.9 295.926c-3.03-1.849-4.545-4.984-4.545-8.119 0-3.124 1.515-6.248 4.545-8.108l129.546-79.276a25.18 25.18 0 0126.279 0l129.546 79.276c3.03 1.859 4.545 4.983 4.545 8.108z" />
@@ -115,15 +115,9 @@ function Dices({ color, height, width, style }) {
   );
 }
 
-Dices.defaultProps = {
-  height: 120,
-  width: 120,
-  color: 'white',
-};
-
 Dices.propTypes = {
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   style: PropTypes.object,
   color: PropTypes.string,
 };

@@ -10,7 +10,7 @@ import Svg, { Circle, G, Path, Rect } from 'react-native-svg';
  * @returns {*}
  * @constructor
  */
-function Aquarius({ color, height, width, style }) {
+function Aquarius({ color = '#FFFFFFFF', height = 120, width = 120, style }) {
   return (
     <Svg height={height} width={width} viewBox="0 0 512 512" style={style}>
       <Path
@@ -72,15 +72,9 @@ function Aquarius({ color, height, width, style }) {
   );
 }
 
-Aquarius.defaultProps = {
-  height: 120,
-  width: 120,
-  color: '#FFFFFFFF',
-};
-
 Aquarius.propTypes = {
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   style: PropTypes.object,
   color: PropTypes.string,
 };

@@ -2,7 +2,13 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import Svg, { Circle, Path } from 'react-native-svg';
 
-function ConstellationSimple({ color, dotColor, height, width, style }) {
+function ConstellationSimple({
+  color = '#fbf1e2',
+  dotColor = '#f4d8a5',
+  height = 120,
+  width = 120,
+  style,
+}) {
   return (
     <Svg height={height} width={width} viewBox="0 0 512 512" style={style}>
       <Path
@@ -20,16 +26,9 @@ function ConstellationSimple({ color, dotColor, height, width, style }) {
   );
 }
 
-ConstellationSimple.defaultProps = {
-  height: 120,
-  width: 120,
-  color: '#fbf1e2',
-  dotColor: '#f4d8a5',
-};
-
 ConstellationSimple.propTypes = {
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   style: PropTypes.object,
   color: PropTypes.string,
 };

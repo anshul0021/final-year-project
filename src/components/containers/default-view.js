@@ -1,13 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  StatusBar,
-  View,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform, StatusBar, View } from 'react-native';
 import { useTheme } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 /**
  * @param children
@@ -22,8 +17,8 @@ import { useTheme } from 'react-native-paper';
 function DefaultView({
   children,
   background,
-  barStyle,
-  keyboardAvoidView,
+  barStyle = 'light-content',
+  keyboardAvoidView = true,
   styleView,
 }) {
   const { colors } = useTheme();
@@ -57,11 +52,6 @@ DefaultView.propTypes = {
   background: PropTypes.string,
   barStyle: PropTypes.oneOf(['light-content', 'dark-content']),
   styleView: PropTypes.object,
-};
-
-DefaultView.defaultProps = {
-  keyboardAvoidView: true,
-  barStyle: 'light-content',
 };
 
 export default DefaultView;

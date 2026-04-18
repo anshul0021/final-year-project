@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTheme } from 'react-native-paper';
 import Svg, { Path } from 'react-native-svg';
 
-function Hand({ color, height, width, style }) {
+function Hand({ color = '#FFFFFFFF', height = 120, width = 120, style }) {
   const { colors } = useTheme();
   return (
     <Svg
@@ -22,15 +22,9 @@ function Hand({ color, height, width, style }) {
   );
 }
 
-Hand.defaultProps = {
-  height: 120,
-  width: 120,
-  color: '#FFFFFFFF',
-};
-
 Hand.propTypes = {
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   style: PropTypes.object,
   color: PropTypes.string,
 };

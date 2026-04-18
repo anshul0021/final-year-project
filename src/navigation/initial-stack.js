@@ -1,5 +1,6 @@
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
+import { useTheme } from 'react-native-paper';
 
 import BirthDateScreen from '../screens/initials/birth-date.screen';
 import LoadingScreen from '../screens/initials/loading.screen';
@@ -8,15 +9,21 @@ import NumberScreen from '../screens/initials/number.screen';
 import RelationshipScreen from '../screens/initials/relationship.screen';
 import SexScreen from '../screens/initials/sex.screen';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 /**
  * @returns {*}
  * @constructor
  */
 function InitialStackNavigation() {
+  const { colors } = useTheme();
   return (
-    <Stack.Navigator initialRouteName="Name" headerMode="screen">
+    <Stack.Navigator
+      initialRouteName="Name"
+      screenOptions={{
+        contentStyle: { backgroundColor: colors.background },
+      }}
+    >
       <Stack.Screen
         name="Name"
         component={NameScreen}

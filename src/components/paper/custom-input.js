@@ -2,8 +2,6 @@ import React from 'react';
 import { StyleSheet, TextInput } from 'react-native';
 import { TextInput as PaperTextInput, useTheme } from 'react-native-paper';
 
-import MainNav from '../navs/main-nav';
-
 /**
  * @param props
  * @returns {*}
@@ -41,8 +39,4 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
 });
-MainNav.defaultProps = {
-  customStyle: null,
-};
-
 export default CustomInput;

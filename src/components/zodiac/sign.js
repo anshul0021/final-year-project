@@ -1,8 +1,7 @@
-import i18n from 'i18n-js';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Caption, Subheading, TouchableRipple } from 'react-native-paper';
+import { Text, TouchableRipple } from 'react-native-paper';
 
 import { Zodiac } from '../../svgs';
 import PlatformUtils from '../../utils/platform';
@@ -22,29 +21,15 @@ const signs = {
   Virgo: Zodiac.Virgo,
 };
 
-/**
- * @param sign {string}
- * @param title {string}
- * @param showTitle {boolean}
- * @param subtitle {string}
- * @param onPress {function}
- * @param style {object}
- * @param signHeight {string|number}
- * @param signWidth {string|number}
- * @param styleTitle {object}
- * @param styleSubtitle {object}
- * @returns {*}
- * @constructor
- */
 function Sign({
   sign,
   title,
-  showTitle,
+  showTitle = true,
   subtitle,
-  onPress,
+  onPress = () => null,
   style,
-  signHeight,
-  signWidth,
+  signHeight = 120,
+  signWidth = 120,
   styleTitle,
   styleSubtitle,
 }) {
@@ -75,9 +60,15 @@ function Sign({
           <ParsedSign width={signHeight} height={signWidth} />
         </View>
         {showTitle && (
-          <Subheading style={styleTitle}>{title ?? i18n.t(sign)}</Subheading>
+          <Text variant="titleMedium" style={styleTitle}>
+            {title ?? sign}
+          </Text>
         )}
-        {subtitle && <Caption style={styleSubtitle}>{subtitle}</Caption>}
+        {subtitle && (
+          <Text variant="bodySmall" style={styleSubtitle}>
+            {subtitle}
+          </Text>
+        )}
       </>
     </TouchableRipple>
   );
@@ -98,13 +89,6 @@ const styles = StyleSheet.create({
     borderRadius: 100,
   },
 });
-
-Sign.defaultProps = {
-  height: 120,
-  width: 120,
-  showTitle: true,
-  onPress: () => null,
-};
 
 Sign.propTypes = {
   sign: PropTypes.string.isRequired,

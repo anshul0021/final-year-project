@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/core';
+import { useNavigation } from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { Dimensions, StyleSheet, View } from 'react-native';
@@ -12,7 +12,11 @@ import { useTheme } from 'react-native-paper';
  * @returns {*}
  * @constructor
  */
-function MainNav({ children, style, rightButton }) {
+function MainNav({
+  children,
+  style,
+  rightButton = <View style={{ width: 1 }} />,
+}) {
   const navigation = useNavigation();
   const { colors } = useTheme();
   return (
@@ -49,10 +53,6 @@ const styles = StyleSheet.create({
 MainNav.propTypes = {
   style: PropTypes.object,
   rightButton: PropTypes.element,
-};
-
-MainNav.defaultProps = {
-  rightButton: <View style={{ width: 1 }} />,
 };
 
 export default MainNav;

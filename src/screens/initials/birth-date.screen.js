@@ -1,8 +1,7 @@
 import RNDateTimePicker from '@react-native-community/datetimepicker';
-import i18n from 'i18n-js';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Button, Headline, Surface, Text, useTheme } from 'react-native-paper';
+import { Button, Surface, Text, useTheme } from 'react-native-paper';
 
 import { DefaultView } from '../../components/containers';
 import SpaceSky from '../../components/decorations/space-sky';
@@ -13,11 +12,6 @@ import Scorpio from '../../svgs/Scorpio';
 import { DateUtils, Platform } from '../../utils';
 import ZodiacCalculator from '../../utils/zodiac-calculator';
 
-/**
- * @param navigation
- * @returns {*}
- * @constructor
- */
 function BirthDateScreen({ navigation }) {
   const [{ session }, dispatch] = useGlobals();
   const { colors } = useTheme();
@@ -59,14 +53,11 @@ function BirthDateScreen({ navigation }) {
       />
       <View style={{ flex: 1 }} />
       <View style={styles.textContainer}>
-        <Headline style={styles.textHeadline}>
-          {i18n.t('Your date of birth')}
-        </Headline>
+        <Text variant="headlineMedium" style={styles.textHeadline}>
+          Your date of birth
+        </Text>
         <Text style={styles.textText}>
-          {i18n.t(
-            '{name}, to give you accurate and personal information we need to know some info',
-            { name: session.name }
-          )}
+          {`${session.name}, to give you accurate and personal information we need to know some info about you.`}
         </Text>
       </View>
       <View style={styles.logoContainer}>
@@ -75,7 +66,7 @@ function BirthDateScreen({ navigation }) {
       <Surface style={styles.dateContainer}>
         {Platform.isAndroid && (
           <Button style={{ alignSelf: 'center' }} onPress={showDatePicker}>
-            {i18n.t('Press to change')}
+            Press to change
           </Button>
         )}
         {show && (
@@ -83,7 +74,6 @@ function BirthDateScreen({ navigation }) {
             value={date}
             display="spinner"
             onChange={onChange}
-            on
             minimumDate={new Date(1930, 0, 0)}
             maximumDate={new Date(2010, 0, 0)}
             textColor="#ffffff"
@@ -91,13 +81,13 @@ function BirthDateScreen({ navigation }) {
         )}
         {Platform.isAndroid && (
           <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Text style={{ fontSize: 40 }}>{DateUtils.toEuropean(date)}</Text>
+            <Text style={{ fontSize: 40 }}>{DateUtils.toReadable(date)}</Text>
           </View>
         )}
       </Surface>
       <View style={styles.buttonContainer}>
         <Button mode="contained" disabled={!date} onPress={_handleContinue}>
-          {i18n.t('Continue')}
+          Continue
         </Button>
       </View>
     </DefaultView>

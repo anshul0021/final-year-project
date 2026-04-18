@@ -1,19 +1,17 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { BlurView } from 'expo-blur';
-import i18n from 'i18n-js';
 import React from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Portal, Text, useTheme } from 'react-native-paper';
 
-import LearnStackNavigation from './learn-stack';
 import { useGlobals } from '../contexts/global';
 import { useIsDark } from '../hooks/use-theme';
-import AstrologersScreen from '../screens/main/astrologers.screen';
-import AstrologerQuestionScreen from '../screens/main/astrologuers-question.screen';
+import ChatScreen from '../screens/main/chat.screen';
 import CompatibilityScreen from '../screens/main/compatibility.screen';
 import DailyScreen from '../screens/main/daily.screen';
+import EditProfileScreen from '../screens/main/edit-profile.screen';
 import ProfileScreen from '../screens/main/profile.screen';
 import ZodiacScreen from '../screens/main/zodiac.screen';
 
@@ -43,7 +41,7 @@ const BarLabel = ({ color, children }) => {
   );
 };
 
-const Sta = createStackNavigator();
+const Sta = createNativeStackNavigator();
 
 const Tab = createBottomTabNavigator();
 
@@ -64,6 +62,7 @@ function BottomBarNavigation() {
           name="symbol"
           component={DailyScreen}
           options={{
+            headerShown: false,
             tabBarIcon: (props) => (
               <BarIcon
                 {...props}
@@ -72,47 +71,36 @@ function BottomBarNavigation() {
             ),
             tabBarLabel: (props) => (
               <BarLabel {...props} colo>
-                {i18n.t(session.sign)}
+                {session.sign}
               </BarLabel>
             ),
-            title: i18n.t(session.sign),
+            title: session.sign,
           }}
         />
         <Tab.Screen
           name="Compatibility"
           component={CompatibilityScreen}
           options={{
+            headerShown: false,
             tabBarIcon: (props) => <BarIcon {...props} name="account-heart" />,
             tabBarLabel: (props) => (
-              <BarLabel {...props}>{i18n.t('Compatibility2')}</BarLabel>
+              <BarLabel {...props}>Compatibility</BarLabel>
             ),
-            title: i18n.t('Compatibility2'),
+            title: 'Compatibility',
           }}
         />
         <Tab.Screen
-          name="Learn"
-          component={LearnStackNavigation}
+          name="Chat"
+          component={ChatScreen}
           options={{
+            headerShown: false,
             tabBarIcon: (props) => (
-              <BarIcon {...props} name="book-open-page-variant" />
+              <BarIcon {...props} name="chat-processing" />
             ),
             tabBarLabel: (props) => (
-              <BarLabel {...props}>{i18n.t('Learn')}</BarLabel>
+              <BarLabel {...props}>Ask AI</BarLabel>
             ),
-            title: i18n.t('Learn'),
-          }}
-        />
-        <Tab.Screen
-          name="Astrologists"
-          component={AstrologersScreen}
-          options={{
-            tabBarIcon: (props) => (
-              <BarIcon {...props} name="theme-light-dark" />
-            ),
-            tabBarLabel: (props) => (
-              <BarLabel {...props}>{i18n.t('Astrologers')}</BarLabel>
-            ),
-            title: i18n.t('Astrologers'),
+            title: 'Ask AI',
           }}
         />
       </Tab.Navigator>
@@ -125,13 +113,32 @@ function MainStackNavigation() {
   const { colors } = useTheme();
   return (
     <>
-      <Sta.Navigator screenOptions={{ headerShown: false }} mode="modal">
+      <Sta.Navigator
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.background },
+        }}
+      >
         <Sta.Screen name="Home" component={BottomBarNavigation} />
         <Sta.Screen
           name="Profile"
           component={ProfileScreen}
           options={{
-            cardStyle: {
+            presentation: 'transparentModal',
+            contentStyle: {
+              backgroundColor: 'transparent',
+              marginTop: 50,
+              borderTopLeftRadius: 30,
+              borderTopRightRadius: 30,
+            },
+          }}
+        />
+        <Sta.Screen
+          name="EditProfile"
+          component={EditProfileScreen}
+          options={{
+            presentation: 'transparentModal',
+            contentStyle: {
               backgroundColor: 'transparent',
               marginTop: 50,
               borderTopLeftRadius: 30,
@@ -143,21 +150,10 @@ function MainStackNavigation() {
           name="Signs"
           component={ZodiacScreen}
           options={{
-            cardStyle: {
+            presentation: 'transparentModal',
+            contentStyle: {
               backgroundColor: 'transparent',
               marginTop: 50,
-              borderTopLeftRadius: 30,
-              borderTopRightRadius: 30,
-            },
-          }}
-        />
-        <Sta.Screen
-          name="Question"
-          component={AstrologerQuestionScreen}
-          options={{
-            cardStyle: {
-              backgroundColor: 'transparent',
-              marginTop: 100,
               borderTopLeftRadius: 30,
               borderTopRightRadius: 30,
             },

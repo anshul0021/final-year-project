@@ -1,10 +1,8 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import { useTheme } from 'react-native-paper';
 import Svg, { Circle, Ellipse, G, Path } from 'react-native-svg';
 
-function ItsDifficult({ color, height, width, style }) {
-  const { colors } = useTheme();
+function ItsDifficult({ color = 'white', height = 120, width = 120, style }) {
   return (
     <Svg height={height} width={width} viewBox="0 0 512 512" style={style}>
       <Circle cx={256} cy={256} r={256} fill="#ffd93b" />
@@ -48,15 +46,9 @@ function ItsDifficult({ color, height, width, style }) {
   );
 }
 
-ItsDifficult.defaultProps = {
-  height: 120,
-  width: 120,
-  color: 'white',
-};
-
 ItsDifficult.propTypes = {
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   style: PropTypes.object,
   color: PropTypes.string,
 };

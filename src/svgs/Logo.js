@@ -9,7 +9,7 @@ import Svg, { Circle, Path } from 'react-native-svg';
  * @returns {*}
  * @constructor
  */
-function Logo({ height, width, style }) {
+function Logo({ height = 120, width = 120, style }) {
   return (
     <Svg height={height} width={width} viewBox="0 0 512 512" style={style}>
       <Circle cx={256} cy={256} r={256} fill="#ffb84d" />
@@ -56,14 +56,9 @@ function Logo({ height, width, style }) {
   );
 }
 
-Logo.defaultProps = {
-  height: 120,
-  width: 120,
-};
-
 Logo.propTypes = {
-  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  height: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   style: PropTypes.object,
 };
 
